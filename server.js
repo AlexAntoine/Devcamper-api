@@ -2,6 +2,7 @@ require('dotenv').config({path:'./config/config.env'});
 const express = require("express");
 const colors = require('colors');
 const bootcamps = require('./routes/bootcamps');
+const errorHandler = require('./middleware/error');
 const morgan = require('morgan');
 const localdb = require('./config/db')
 
@@ -22,6 +23,8 @@ const server = app.listen(port, ()=>{
 })
 
 app.use('/api/v1/bootcamps', bootcamps);
+
+app.use(errorHandler)
 
 //handle unhandlepromiserejection
 

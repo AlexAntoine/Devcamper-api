@@ -7,8 +7,8 @@ const asyncHandler = require('../middleware/async');
 
 exports.getBootcamps = asyncHandler(async(req, res, next)=>{
     const result = await bootcamps.find();
-
-    res.status(200).json({sucess:true, count: bootcamps.length, data:result});
+    
+    res.status(200).json({success:true, count: result.length, data:result});
    
    
 });

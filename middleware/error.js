@@ -22,7 +22,7 @@ const errorHandler = (error, req, res, next)=>{
         const message = Object.values(err.errors).map(value => value.message);
         err = new ErrorResponse(message, 400);
     }
-    res.status(err.statusCode || 500).json({sucess:false, err: err.message || 'Server Error'})
+    res.status(err.statusCode || 500).json({success:false, err: err.message || 'Server Error'})
 }
 
 module.exports = errorHandler;

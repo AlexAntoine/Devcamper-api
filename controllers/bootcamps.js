@@ -10,13 +10,39 @@ const Geocoder = require('../utils/geocoder');
 exports.getBootcamps = asyncHandler(async(req, res, next)=>{
     let query;
 
-    let quertyString = JSON.stringify(req.query);
+    //copy req.query object 
+    const reqQuery = {...req.query}
 
+    //Fileds to exclude
+    const removeFields = ['select','sort'];
+
+    //Loop over fields and delete them from reqQuery
+    removeFields.forEach(param => delete reqQuery[param]);
+
+    //Create querystring 
+    let quertyString = JSON.stringify(reqQuery);
+
+    //Create Operators ($gt, $lte, etc)
     quertyString = quertyString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    console.log(quertyString);
-
+    //Find resources
     query = bootcamp.find(JSON.parse(quertyString))
+
+    //SELECT FIELDS
+    if(req.query.select){
+        const fields = req.query.select.split(',').join(' ');
+        
+        query = query.select(fields);
+    }
+
+    //SORT
+    if(req.query.sort){
+        const sortBy = req.query.sort.split(',').join(' ');
+
+        query = query.sort(sortBy);
+    }else{
+        query = query.sort('-createdAt')
+    }
 
     const result = await query;
     
